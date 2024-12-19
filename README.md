@@ -10,7 +10,7 @@ Project Structure
 
 Installation
 ````
-Download your local llm
+Download your local llm and update its name in here https://github.com/TsTsvetkoff/LLM_Hangman_API_playground/blob/main/local_llm.py#L51
 ````
 
 ```
