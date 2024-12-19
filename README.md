@@ -14,7 +14,9 @@ Download your local llm and update its name in here https://github.com/TsTsvetko
 ````
 
 ```
-pip install flask requests langchain
+python3 -m venv venv
+source ./venv/bin/activate
+pip install -r requirements.txt
 ```
 Run the Hangman API:
 ```
