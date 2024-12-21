@@ -41,14 +41,16 @@ def play_hangman_with_llm():
         if state.get("status") in ["won", "lost"]:
             print(f"Game Over! Status: {state['status']}")
             print(f"The word was: {state.get('word')}")
+
+            provide_game_commentary(state)
             break
 
         print(f"Word: {state['word_display']}")
         print(f"Guessed Letters: {', '.join(state['guessed_letters'])}")
         print(f"Wrong Attempts: {state['wrong_guesses']}/{state['max_attempts']}")
-        print("=================================\n")
+        print("============================================================================================")
 
-        model = OllamaLLM(model="mistral-nemo") # update your downloaded llm model in here !!!!
+        model = OllamaLLM(model="mistral-nemo")
         prompt_template = (
             f"You are playing Hangman. The word so far is: {state['word_display']}.\n"
             f"The letters guessed so far are: {', '.join(state['guessed_letters'])}.\n"
@@ -76,6 +78,25 @@ def play_hangman_with_llm():
         except requests.exceptions.HTTPError as e:
             print(
                 f"Error with LLM's guess: {guessed_letter}. Error: {e.response.json().get('detail', 'Unknown error')}")
+
+
+def provide_game_commentary(state):
+    """
+    Use the LLM to generate a reflection or commentary about the game.
+    """
+    model = OllamaLLM(model="mistral-nemo")
+    prompt_template = (
+        f"The Hangman game has ended. Here is the summary:\n"
+        f"Final word: {state.get('word')}\n"
+        f"Reflect on the game. Was the strategy effective? Suggest ways to improve for the next game.\n"
+        f"Your response should be a concise reflection, focusing on what went well and what can be improved."
+    )
+    prompt = ChatPromptTemplate.from_template(prompt_template)
+    chain = prompt | model
+    commentary = chain.invoke({"input": ""}).strip()
+
+    print("\nLLM's Post-Game Commentary:")
+    print(commentary)
 
 
 if __name__ == "__main__":
